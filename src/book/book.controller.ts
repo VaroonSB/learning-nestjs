@@ -4,14 +4,20 @@ import {
   Get,
   Param,
   Post,
+  UseFilters,
+  UseInterceptors,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
 import { BookService } from './book.service';
 import { Book } from './book.interface';
 import { CreateBookDto } from './dto/create-book.dto';
+import { TransformInterceptor } from 'src/transform.interceptor';
+import { HttpExceptionFilter } from 'src/http-exception.filter';
 
+@UseInterceptors(TransformInterceptor)
 @UsePipes(new ValidationPipe({ transform: true }))
+@UseFilters(HttpExceptionFilter)
 @Controller('books')
 export class BookController {
   constructor(private readonly bookService: BookService) {}
